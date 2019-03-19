@@ -9,42 +9,34 @@ use App\Notifications\TestMessage;
 use App\Notifications\NotifyAdmin;
 use App\User;
 
-class HomeController extends Controller
+class FrontController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware(['auth', 'verified']);
-    }
+    
+	public function notifyEmailAdd()
+	{
+		$users = User::all();
+		return view('notification', compact('users'));
+	}
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function notifymail(Request $requst)
     {
-        return view('home');
-    }
-
-    public function notifymail()
-    {
+    	//dd($requst->all());
 
         $user = User::create([
-            'name' => 'rana',
-            'email' => 'rana@gmail.com',
-            'phone_number' => '8801776398979',
-            'password' => Hash::make('123456'),
+            'name' => $requst->name,
+            'email' => $requst->email,
+            'phone_number' => $requst->phone_number,
+            'password' => Hash::make($requst->password),
         ]);
 
         $user->notify(new TestMessage($user));
 
         $admin = User::find('3');
         $admin->notify(new NotifyAdmin($user));
+
+        Session::Flash('success', 'Registration Success');
+
+        return redirect()->back();
     }
 
     public function varifyEmail($id)
@@ -64,7 +56,5 @@ class HomeController extends Controller
             return redirect()->route('home');
         }
     }
-
-    
 
 }

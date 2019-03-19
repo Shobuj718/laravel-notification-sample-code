@@ -17,7 +17,8 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/notifymail', 'HomeController@notifymail')->name('notifymail');
+Route::get('/notifyEmailAdd', 'FrontController@notifyEmailAdd')->name('notifyEmailAdd');
+Route::post('/notifymail', 'FrontController@notifymail')->name('notifymail');
 Route::get('/varifyEmail/{id}', 'HomeController@varifyEmail')->name('varifyEmail');
 
 Route::get('/home', 'HomeController@index')->name('home');
